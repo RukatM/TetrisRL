@@ -1,15 +1,22 @@
 from settings import *
+from board import Board
 import pygame
 
 class Main:
      def __init__(self):
          
           pygame.init()
-          self.screen = pygame.display.set_mode((g_width + m_width,g_height + m_height))
+          self.screen = pygame.display.set_mode((g_width + m_width + padding * 3,g_height + padding * 2))
           self.clock = pygame.time.Clock()
           pygame.display.set_caption("TetrisRL")
           pygame.display.set_icon(icon)
      
+          self.game_space = pygame.Surface((g_width,g_height))
+          self.menu_space = pygame.Surface((m_width,g_height))
+          
+          self.board = Board(rows,collumns)
+
+
      def run(self):
           run = True
           while run:
@@ -18,7 +25,15 @@ class Main:
                          run = False
 
                
-               self.screen.fill("purple")
+               self.screen.fill((186, 0, 216))
+               self.screen.blit(self.game_space, (10, 10))
+               self.screen.blit(self.menu_space, (g_width + padding*2 , 10))
+               
+               self.game_space.fill((211, 126, 183))
+               self.menu_space.fill((90, 0, 185))
+               
+               self.board.draw(self.game_space)
+
                pygame.display.update()
                self.clock.tick(60)
 
