@@ -1,5 +1,6 @@
 from settings import *
 from board import Board
+from block import Block
 import pygame
 
 class Main:
@@ -15,6 +16,7 @@ class Main:
           self.menu_space = pygame.Surface((m_width,g_height))
           
           self.board = Board(rows,collumns)
+          self.block = Block()
 
 
      def run(self):
