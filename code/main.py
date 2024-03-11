@@ -16,7 +16,10 @@ class Main:
           self.menu_space = pygame.Surface((m_width,g_height))
           
           self.board = Board(rows,collumns)
-          self.block = Block()
+          self.block = None
+
+          self.elapsed_time = 0
+          
 
 
      def run(self):
@@ -34,10 +37,21 @@ class Main:
                self.game_space.fill((211, 126, 183))
                self.menu_space.fill((90, 0, 185))
                
-               self.board.draw(self.game_space)
-
+               self.board.draw(self.game_space,self.block)
+               
+               
+               if self.block is None or self.elapsed_time >= 10000:
+                    self.board.resetGrid(self.screen)
+                    self.elapsed_time = 0
+                    self.block = Block()
+                    self.block.generateBlock()
+                    self.block.drawBlock(self.board)
+                    
+                    
+               
                pygame.display.update()
-               self.clock.tick(60)
+               self.elapsed_time += self.clock.tick(60)
+
 
           pygame.quit()
 
