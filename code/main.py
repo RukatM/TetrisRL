@@ -18,7 +18,8 @@ class Main:
           self.board = Board(rows,collumns)
           self.block = None
 
-          self.elapsed_time = 0
+          self.est_time = 0
+          
           
 
 
@@ -28,6 +29,20 @@ class Main:
                for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                          run = False
+                    elif event.type == pygame.KEYDOWN:
+
+                         if event.key == pygame.K_LEFT:
+                              self.block.moveLeft()
+                              print("LEWO")
+                              self.board.resetGrid(self.screen)
+                              self.block.drawBlock(self.board)
+                              
+                         
+                         if event.key == pygame.K_RIGHT:
+                              self.block.moveRight()
+                              self.board.resetGrid(self.screen)
+                              self.block.drawBlock(self.board)
+                   
 
                
                self.screen.fill((186, 0, 216))
@@ -40,17 +55,21 @@ class Main:
                self.board.draw(self.game_space,self.block)
                
                
-               if self.block is None or self.elapsed_time >= 10000:
+               if self.block is None or self.est_time % 10000 == 0:
                     self.board.resetGrid(self.screen)
-                    self.elapsed_time = 0
                     self.block = Block()
                     self.block.generateBlock()
+                    self.block.drawBlock(self.board)
+
+               if self.est_time % 300 == 0:
+                    self.block.moveDown()
+                    self.board.resetGrid(self.screen)
                     self.block.drawBlock(self.board)
                     
                     
                
                pygame.display.update()
-               self.elapsed_time += self.clock.tick(60)
+               self.est_time += self.clock.tick(60)
 
 
           pygame.quit()
