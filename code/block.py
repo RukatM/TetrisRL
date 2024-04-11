@@ -7,7 +7,8 @@ class Block:
     def __init__(self):
         self.tetrominoLetter = random.choice(list(BLOCK_COLORS.keys()))
         self.tetrominoColor = BLOCK_COLORS[self.tetrominoLetter]
-        self.tetrominoSpace = BLOCK_SPACE[self.tetrominoLetter]
+        self.tetrominoSpace = BLOCK_SPACE[self.tetrominoLetter][0]
+        self.rotation = 0
         self.x = 5
         self.y = 1
     
@@ -29,8 +30,23 @@ class Block:
             self.x -= 1
 
     def moveDown(self):
-        if self.y  <20:
-            self.y += 1
+        if len(self.tetrominoSpace)  == 3:
+            if self.y < 17:
+                self.y += 1
+            
+        else:
+            if self.y < 18:
+                self.y += 1 
+            
+
+    def rotateR(self):
+        if self.rotation !=3:
+            self.rotation +=1
+        else:
+            self.rotation=0
+        self.tetrominoSpace = BLOCK_SPACE[self.tetrominoLetter][self.rotation]
+          
+        
 
  
 

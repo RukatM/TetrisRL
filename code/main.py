@@ -10,7 +10,7 @@ class Main:
           self.screen = pygame.display.set_mode((g_width + m_width + padding * 3,g_height + padding * 2))
           self.clock = pygame.time.Clock()
           pygame.display.set_caption("TetrisRL")
-          pygame.display.set_icon(icon)
+         # pygame.display.set_icon(icon)
      
           self.game_space = pygame.Surface((g_width,g_height))
           self.menu_space = pygame.Surface((m_width,g_height))
@@ -34,15 +34,22 @@ class Main:
                          if event.key == pygame.K_LEFT:
                               self.block.moveLeft()
                               print("LEWO")
-                              self.board.resetGrid(self.screen)
+                              self.board.resetGrid()
                               self.block.drawBlock(self.board)
                               
                          
                          if event.key == pygame.K_RIGHT:
                               self.block.moveRight()
-                              self.board.resetGrid(self.screen)
+                              self.board.resetGrid()
                               self.block.drawBlock(self.board)
-                   
+                         if event.key == pygame.K_DOWN:
+                              self.block.moveDown()
+                              self.board.resetGrid()
+                              self.block.drawBlock(self.board)
+                         if event.key == pygame.K_SPACE:
+                              self.block.rotateR()
+                              self.board.resetGrid()
+                              self.block.drawBlock(self.board)
 
                
                self.screen.fill((186, 0, 216))
@@ -56,15 +63,30 @@ class Main:
                
                
                if self.block is None or self.est_time % 10000 == 0:
-                    self.board.resetGrid(self.screen)
+                    self.board.resetGrid()
                     self.block = Block()
                     self.block.generateBlock()
                     self.block.drawBlock(self.board)
 
-               if self.est_time % 300 == 0:
+               if self.est_time % 100 == 0:
                     self.block.moveDown()
-                    self.board.resetGrid(self.screen)
+                    self.board.resetGrid()
                     self.block.drawBlock(self.board)
+                    print(self.block.y)
+               
+               if len(self.block.tetrominoSpace) == 3:
+                    if self.block.y == 17: 
+                         self.board.updateTemplate()
+                         self.block = Block()
+                         self.block.generateBlock()
+                         self.block.drawBlock(self.board)
+               elif len(self.block.tetrominoSpace) == 2:
+                    if self.block.y == 18 :
+                         self.board.updateTemplate()
+                         self.block = Block()
+                         self.block.generateBlock()
+                         self.block.drawBlock(self.board)
+               
                     
                     
                
