@@ -49,6 +49,7 @@ class Main:
                               # print(self.block.x)
 
                          if event.key == pygame.K_DOWN:
+                            
                               self.block.moveDown()
                               self.board.resetGrid()
                               self.block.drawBlock(self.board)
@@ -62,13 +63,21 @@ class Main:
                          self.block.moveDown()
                          self.board.resetGrid()
                          self.block.drawBlock(self.board)
-                         print(self.block.y,self.block.max_y)
+                         print(self.block.y,self.block.x)
                          # print(self.block.y)
 
                     elif event.type == FALL_SPEED_EVENT:
                          self.fall_speed -= 100
                          self.timer_event = pygame.time.set_timer(MOVE_DOWN_EVENT, fall_speed)
                          # print(self.fall_speed)
+                         
+                    elif event.type == NEW_BLOCK_EVENT:
+                         self.board.updateTemplate()
+                         self.block = Block()
+                         self.block.generateBlock()
+                         self.block.drawBlock(self.board)
+               
+                         
                          
 
 
@@ -85,12 +94,9 @@ class Main:
                self.board.draw(self.game_space,self.block)
                     
                
-               if self.block.y == self.block.max_y :
-                    self.board.updateTemplate()
-                    self.block = Block()
-                    self.block.generateBlock()
-                    self.block.drawBlock(self.board)
-               
+               if self.block.checkCollison(self.board):
+                    pygame.event.post(pygame.event.Event(NEW_BLOCK_EVENT))
+                    
                pygame.display.update()
                self.est_time += self.clock.tick(60)
 

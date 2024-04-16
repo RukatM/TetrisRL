@@ -18,6 +18,7 @@ m_width = tile_size * 4
 #events
 MOVE_DOWN_EVENT= pygame.USEREVENT + 1
 FALL_SPEED_EVENT= pygame.USEREVENT + 2
+NEW_BLOCK_EVENT = pygame.USEREVENT + 3
 
 
 

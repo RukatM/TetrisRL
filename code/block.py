@@ -1,7 +1,7 @@
 import pygame
 import random
 import board 
-from settings import BLOCK_SPACE,BLOCK_COLORS
+from settings import BLOCK_SPACE,BLOCK_COLORS,NEW_BLOCK_EVENT
 
 class Block:
     def __init__(self):
@@ -18,7 +18,6 @@ class Block:
         print(self.tetrominoColor,self.tetrominoLetter,self.tetrominoSpace)
     
     def drawBlock(self,board):
-        
         for i in range(len(self.tetrominoSpace)):
             for j in range(len(self.tetrominoSpace[i])):
                 board.grid[i+self.y][j+self.x] =  self.tetrominoSpace[i][j]
@@ -32,8 +31,6 @@ class Block:
             self.x -= 1
 
     def moveDown(self):
-        #if self.checkCollison(0,1):
-
         if self.y < self.max_y:
             self.y += 1
             
@@ -46,14 +43,15 @@ class Block:
         self.max_y = 20 - len(self.tetrominoSpace)
         self.max_x = 10 - len(self.tetrominoSpace[0])
 
-    def checkCollison(self,dx,dy):
-        for i in range(len(self.tetrominoSpace)):
-            for j in range(len(self.tetrominoSpace[i])):
-                if self.tetrominoSpace[i][j] != 0:
-                  # Sprawdź, czy komórka pod klockiem jest zajęta
-                  if board.grid[self.y + dy + i][self.x + dx + j] != 0:
-                    return True
-        return True
+    def checkCollison(self,board):
+        if self.y == self.max_y:
+            return True
+        
+        else:
+            for i in range(len(self.tetrominoSpace[0])):
+                if  board.grid[self.y + len(self.tetrominoSpace) ][self.x + i] != 0 and board.grid[self.y + len(self.tetrominoSpace) -1][self.x + i] == 1:
+                    return True 
+        return False
 
           
         
