@@ -1,6 +1,6 @@
 import pygame
 import random
-import board
+import board 
 from settings import BLOCK_SPACE,BLOCK_COLORS
 
 class Block:
@@ -32,10 +32,11 @@ class Block:
             self.x -= 1
 
     def moveDown(self):
+        #if self.checkCollison(0,1):
+
         if self.y < self.max_y:
             self.y += 1
             
-
     def rotateR(self):
         if self.rotation !=3:
             self.rotation +=1
@@ -44,6 +45,16 @@ class Block:
         self.tetrominoSpace = BLOCK_SPACE[self.tetrominoLetter][self.rotation]
         self.max_y = 20 - len(self.tetrominoSpace)
         self.max_x = 10 - len(self.tetrominoSpace[0])
+
+    def checkCollison(self,dx,dy):
+        for i in range(len(self.tetrominoSpace)):
+            for j in range(len(self.tetrominoSpace[i])):
+                if self.tetrominoSpace[i][j] != 0:
+                  # Sprawdź, czy komórka pod klockiem jest zajęta
+                  if board.grid[self.y + dy + i][self.x + dx + j] != 0:
+                    return True
+        return True
+
           
         
 
