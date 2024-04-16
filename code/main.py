@@ -3,6 +3,7 @@ from board import Board
 from block import Block
 import pygame
 
+
 class Main:
      def __init__(self):
          
@@ -16,7 +17,12 @@ class Main:
           self.menu_space = pygame.Surface((m_width,g_height))
           
           self.board = Board(rows,collumns)
-          self.block = None
+
+          self.block = Block()
+
+          self.fall_speed = fall_speed
+          self.timer_event = pygame.time.set_timer(MOVE_DOWN_EVENT, fall_speed)
+          self.timer_event = pygame.time.set_timer(FALL_SPEED_EVENT, 10000)
 
           self.est_time = 0
           
@@ -33,23 +39,40 @@ class Main:
 
                          if event.key == pygame.K_LEFT:
                               self.block.moveLeft()
-                              print("LEWO")
                               self.board.resetGrid()
-                              self.block.drawBlock(self.board)
-                              
+                              self.block.drawBlock(self.board)   
                          
                          if event.key == pygame.K_RIGHT:
                               self.block.moveRight()
                               self.board.resetGrid()
                               self.block.drawBlock(self.board)
+                              # print(self.block.x)
+
                          if event.key == pygame.K_DOWN:
                               self.block.moveDown()
                               self.board.resetGrid()
                               self.block.drawBlock(self.board)
+
                          if event.key == pygame.K_SPACE:
                               self.block.rotateR()
                               self.board.resetGrid()
                               self.block.drawBlock(self.board)
+
+                    elif event.type == MOVE_DOWN_EVENT:
+                         self.block.moveDown()
+                         self.board.resetGrid()
+                         self.block.drawBlock(self.board)
+                         print(self.block.y,self.block.max_y)
+                         # print(self.block.y)
+
+                    elif event.type == FALL_SPEED_EVENT:
+                         self.fall_speed -= 100
+                         self.timer_event = pygame.time.set_timer(MOVE_DOWN_EVENT, fall_speed)
+                         # print(self.fall_speed)
+                         
+
+
+                         
 
                
                self.screen.fill((186, 0, 216))
@@ -60,35 +83,13 @@ class Main:
                self.menu_space.fill((90, 0, 185))
                
                self.board.draw(self.game_space,self.block)
+                    
                
-               
-               if self.block is None or self.est_time % 10000 == 0:
-                    self.board.resetGrid()
+               if self.block.y == self.block.max_y :
+                    self.board.updateTemplate()
                     self.block = Block()
                     self.block.generateBlock()
                     self.block.drawBlock(self.board)
-
-               if self.est_time % 100 == 0:
-                    self.block.moveDown()
-                    self.board.resetGrid()
-                    self.block.drawBlock(self.board)
-                    print(self.block.y)
-               
-               if len(self.block.tetrominoSpace) == 3:
-                    if self.block.y == 17: 
-                         self.board.updateTemplate()
-                         self.block = Block()
-                         self.block.generateBlock()
-                         self.block.drawBlock(self.board)
-               elif len(self.block.tetrominoSpace) == 2:
-                    if self.block.y == 18 :
-                         self.board.updateTemplate()
-                         self.block = Block()
-                         self.block.generateBlock()
-                         self.block.drawBlock(self.board)
-               
-                    
-                    
                
                pygame.display.update()
                self.est_time += self.clock.tick(60)

@@ -11,6 +11,8 @@ class Block:
         self.rotation = 0
         self.x = 5
         self.y = 1
+        self.max_y = 20 - len(self.tetrominoSpace)
+        self.max_x = 10 - len(self.tetrominoSpace[0])
     
     def generateBlock(self):
         print(self.tetrominoColor,self.tetrominoLetter,self.tetrominoSpace)
@@ -22,7 +24,7 @@ class Block:
                 board.grid[i+self.y][j+self.x] =  self.tetrominoSpace[i][j]
 
     def moveRight(self):
-        if self.x < 9:
+        if self.x < self.max_x:
             self.x += 1
 
     def moveLeft(self):
@@ -30,13 +32,8 @@ class Block:
             self.x -= 1
 
     def moveDown(self):
-        if len(self.tetrominoSpace)  == 3:
-            if self.y < 17:
-                self.y += 1
-            
-        else:
-            if self.y < 18:
-                self.y += 1 
+        if self.y < self.max_y:
+            self.y += 1
             
 
     def rotateR(self):
@@ -45,6 +42,8 @@ class Block:
         else:
             self.rotation=0
         self.tetrominoSpace = BLOCK_SPACE[self.tetrominoLetter][self.rotation]
+        self.max_y = 20 - len(self.tetrominoSpace)
+        self.max_x = 10 - len(self.tetrominoSpace[0])
           
         
 

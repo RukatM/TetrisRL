@@ -6,6 +6,7 @@ padding = 10
 rows = 20
 g_width = tile_size * collumns
 g_height = tile_size * rows
+fall_speed = 500
 
 #menu
 m_width = tile_size * 4
@@ -13,6 +14,12 @@ m_width = tile_size * 4
 
 #img
 #icon = pygame.image.load("trl.png")
+
+#events
+MOVE_DOWN_EVENT= pygame.USEREVENT + 1
+FALL_SPEED_EVENT= pygame.USEREVENT + 2
+
+
 
 #blocks
 T = "T"
