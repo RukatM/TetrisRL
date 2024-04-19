@@ -22,6 +22,7 @@ class Block:
             for j in range(len(self.tetrominoSpace[i])):
                 if self.tetrominoSpace[i][j] != 0:  
                     board.grid[i+self.y][j+self.x] =  self.tetrominoSpace[i][j]
+                    board.gridColors[i+self.y][j+self.x] = self.tetrominoColor
 
     def moveRight(self,board):
         if self.checkRightCollision(board) == False:
@@ -44,6 +45,11 @@ class Block:
         self.max_y = 20 - len(self.tetrominoSpace)
         self.max_x = 10 - len(self.tetrominoSpace[0])
 
+    def hardDrop(self,board):
+        while self.checkDownCollison(board) == False:
+            self.y += 1
+
+
     def checkDownCollison(self,board):
         if self.y == self.max_y:
             return True
@@ -56,9 +62,6 @@ class Block:
                 for j in range(len(self.tetrominoSpace[0])):
                     if self.tetrominoSpace[i][j] == 0 and board.grid[self.y+i][self.x+j] == 1 and self.tetrominoSpace[i-1][j] == 1:
                         return True
-            
-                
-            
         return False
     
     def checkLeftCollision(self,board):
@@ -79,7 +82,8 @@ class Block:
         else:
             return True
           
-        
+    
+    
 
  
 

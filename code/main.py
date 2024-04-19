@@ -43,10 +43,9 @@ class Main:
                               self.block.drawBlock(self.board)   
                          
                          if event.key == pygame.K_RIGHT:
-                              self.block.moveRight(self. board)
+                              self.block.moveRight(self.board)
                               self.board.resetGrid()
                               self.block.drawBlock(self.board)
-                              # print(self.block.x)
 
                          if event.key == pygame.K_DOWN:
                             
@@ -54,10 +53,17 @@ class Main:
                               self.board.resetGrid()
                               self.block.drawBlock(self.board)
 
-                         if event.key == pygame.K_SPACE:
+                         if event.key == pygame.K_c:
                               self.block.rotateR()
                               self.board.resetGrid()
                               self.block.drawBlock(self.board)
+                         
+                         if event.key == pygame.K_SPACE:
+                              self.block.hardDrop(self.board)
+                              self.board.resetGrid()
+                              self.block.drawBlock(self.board)
+
+
 
                     elif event.type == MOVE_DOWN_EVENT:
                          self.block.moveDown()
@@ -76,14 +82,9 @@ class Main:
                          self.block = Block()
                          self.block.generateBlock()
                          self.block.drawBlock(self.board)
+                        
                
-                         
-                         
-
-
-                         
-
-               
+        
                self.screen.fill((186, 0, 216))
                self.screen.blit(self.game_space, (10, 10))
                self.screen.blit(self.menu_space, (g_width + padding*2 , 10))
@@ -91,10 +92,11 @@ class Main:
                self.game_space.fill((211, 126, 183))
                self.menu_space.fill((90, 0, 185))
                
-               self.board.draw(self.game_space,self.block)
+               self.board.draw(self.game_space)
                     
                
                if self.block.checkDownCollison(self.board):
+                    self.board.checkTetris()
                     pygame.event.post(pygame.event.Event(NEW_BLOCK_EVENT))
                     
                pygame.display.update()
