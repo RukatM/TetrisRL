@@ -38,12 +38,12 @@ class Main:
                     elif event.type == pygame.KEYDOWN:
 
                          if event.key == pygame.K_LEFT:
-                              self.block.moveLeft()
+                              self.block.moveLeft(self.board)
                               self.board.resetGrid()
                               self.block.drawBlock(self.board)   
                          
                          if event.key == pygame.K_RIGHT:
-                              self.block.moveRight()
+                              self.block.moveRight(self. board)
                               self.board.resetGrid()
                               self.block.drawBlock(self.board)
                               # print(self.block.x)
@@ -94,7 +94,7 @@ class Main:
                self.board.draw(self.game_space,self.block)
                     
                
-               if self.block.checkCollison(self.board):
+               if self.block.checkDownCollison(self.board):
                     pygame.event.post(pygame.event.Event(NEW_BLOCK_EVENT))
                     
                pygame.display.update()
