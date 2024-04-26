@@ -1,4 +1,5 @@
 import pygame
+pygame.init()
 #window settings
 tile_size = 30
 collumns = 10
@@ -10,6 +11,7 @@ fall_speed = 500
 
 #menu
 m_width = tile_size * 4
+
 
 
 #img

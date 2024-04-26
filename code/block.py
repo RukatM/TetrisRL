@@ -1,11 +1,10 @@
 import pygame
 import random
-import board 
 from settings import BLOCK_SPACE,BLOCK_COLORS,NEW_BLOCK_EVENT
 
 class Block:
-    def __init__(self):
-        self.tetrominoLetter = random.choice(list(BLOCK_COLORS.keys()))
+    def __init__(self,next_tetromino_letter = random.choice(list(BLOCK_COLORS.keys()))):
+        self.tetrominoLetter = next_tetromino_letter
         self.tetrominoColor = BLOCK_COLORS[self.tetrominoLetter]
         self.tetrominoSpace = BLOCK_SPACE[self.tetrominoLetter][0]
         self.rotation = 0
@@ -81,6 +80,13 @@ class Block:
             return False
         else:
             return True
+        
+    def checkNewBlockCollision(self,board):
+        for i in range(len(self.tetrominoSpace)):
+            for j in range(len(self.tetrominoSpace[i])):
+                if self.tetrominoSpace[i][j] == 1 and board.grid[self.y + i][self.x + j] == 1:
+                    return True
+        return False
           
     
     

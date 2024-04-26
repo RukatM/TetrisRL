@@ -1,5 +1,5 @@
 import pygame
-from settings import tile_size,g_height,g_width
+from settings import tile_size,BLOCK_COLORS,BLOCK_SPACE
 
 
 class Board:
@@ -21,7 +21,19 @@ class Board:
             for col in range(self.collumns):
                 if self.grid[row][col] != 0:
                     pygame.draw.rect(screen, (0, 0, 0), (col * tile_size, row * tile_size, tile_size, tile_size), 1)
-        
+    
+    def drawNextBlock(self,screen,key,x,y):
+        space = BLOCK_SPACE[key]
+        color = BLOCK_COLORS[key]
+        for row in range(len(space[0])):
+            for col in range(len(space[0][row])):
+               
+                if space[0][row][col] == 1:
+                    tile_x = x + col * tile_size
+                    tile_y = y + row * tile_size
+                    pygame.draw.rect(screen, color, (tile_x, tile_y, tile_size, tile_size))
+                    pygame.draw.rect(screen, (0, 0, 0), (tile_x, tile_y, tile_size, tile_size), 2)
+
     def resetGrid(self):
         for row in range(self.rows):
             for col in range(self.collumns):
@@ -33,24 +45,27 @@ class Board:
             for col in range(self.collumns):
                 if self.grid[row][col] != self.template[row][col]:
                     self.template[row][col] = self.grid[row][col]
+    
     def checkTetris(self):
+        points_recieved = 0
+        tetris_counter = 0
         i = len(self.grid) -1
         while i >= 0:
             if self.grid[i].count(1) == len(self.grid[0]):
                 del self.grid[i]
+                tetris_counter += 1
                 del self.gridColors[i]
                 self.grid.insert(0, [0] * self.collumns)
                 self.gridColors.insert(0, [0] * self.collumns)
                 i = len(self.grid) -1
             else:
                 i -= 1
-    def show_game_over_screen(self,screen):
-        font = pygame.font.Font(None, 36)  
-        text = font.render("Game Over", True, (255, 255, 255))  
-        text_rect = text.get_rect(center=(g_width // 2, g_height // 2)) 
-        screen.blit(text, text_rect) 
+        bonus = 1
+        for i in range(tetris_counter):
+            points_recieved += bonus * 100
+            bonus *= 3
+        return points_recieved
 
-        pygame.display.flip()
-    
+   
         
                 
