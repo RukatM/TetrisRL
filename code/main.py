@@ -5,6 +5,7 @@ from block import Block
 import random
 import pygame
 
+moveDown = False
 
 class Main:
      def __init__(self):
@@ -29,10 +30,17 @@ class Main:
           self.next_block_letter = random.choice(list(BLOCK_COLORS.keys()))
 
           self.est_time = 0
-          
           self.points = 0
+
+          self.moveDown = False
+          self.moveLeft = False
+          self.moveRight = False
+
+          self.moveDelay = 3
+          self.downDelay = 10
           
 
+   
 
      def run(self):
           run = True
@@ -44,23 +52,16 @@ class Main:
                     elif event.type == pygame.KEYDOWN:
 
                          if event.key == pygame.K_LEFT:
-                              self.block.moveLeft(self.board)
-                              self.board.resetGrid()
-                              self.block.drawBlock(self.board)   
+                              self.moveLeft = True
                          
                          if event.key == pygame.K_RIGHT:
-                              self.block.moveRight(self.board)
-                              self.board.resetGrid()
-                              self.block.drawBlock(self.board)
+                              self.moveRight = True
 
                          if event.key == pygame.K_DOWN:
-                            
-                              self.block.moveDown()
-                              self.board.resetGrid()
-                              self.block.drawBlock(self.board)
+                              self.moveDown = True
 
                          if event.key == pygame.K_c:
-                              self.block.rotateR()
+                              self.block.rotateR(self.board)
                               self.board.resetGrid()
                               self.block.drawBlock(self.board)
                          
@@ -75,16 +76,21 @@ class Main:
                                    self.board = Board(rows,collumns)
                                    self.block = Block()
                                    self.points = 0
+                    elif event.type == pygame.KEYUP:
+                         if event.key == pygame.K_LEFT:
+                              self.moveLeft = False
+                         
+                         if event.key == pygame.K_RIGHT:
+                              self.moveRight = False
 
-
-
+                         if event.key == pygame.K_DOWN:
+                              self.moveDown = False
 
                     elif event.type == MOVE_DOWN_EVENT:
-                         self.block.moveDown()
+                         self.block.moveDown(self.board)
                          self.board.resetGrid()
                          self.block.drawBlock(self.board)
-                         #print(self.block.y,self.block.x)
-                         # print(self.block.y)
+
 
                     elif event.type == FALL_SPEED_EVENT:
                          self.fall_speed -= 100
@@ -111,23 +117,49 @@ class Main:
                
                #print(self.points)
                draw_text("NEXT", (g_width + padding*2 + m_width //2), 40,20,True,self.screen)
-               draw_text("POINTS", (g_width + padding*2 + m_width //2), self.menu_space.get_height() //2,20,True,self.screen)
-               draw_text(str(self.points), (g_width + padding*2 + m_width //2), self.menu_space.get_height() //2 + 20,20,False,self.screen)
+               draw_text("SCORE", (g_width + padding*2 + m_width //2), self.menu_space.get_height() //2-100,20,True,self.screen)
+               draw_text(str(self.points), (g_width + padding*2 + m_width //2), self.menu_space.get_height() //2 -60,20,True,self.screen)
                self.board.drawNextBlock(self.screen,self.next_block_letter,(g_width + padding*2 + m_width //2)-60,80)
                
                if not self.game_over:
-                    self.game_space.fill((5,189,134))
+                    
+                    if self.moveDelay < 0:
+                         if self.moveDown:
+                              self.block.moveDown(self.board)
+                              self.board.resetGrid()
+                              self.block.drawBlock(self.board)
+                         
+                         if self.moveLeft:
+                              self.block.moveLeft(self.board)
+                              self.board.resetGrid()
+                              self.block.drawBlock(self.board)
+
+                         if self.moveRight:
+                              self.block.moveRight(self.board)
+                              self.board.resetGrid()
+                              self.block.drawBlock(self.board)
+                         self.moveDelay = 3
+                    else:
+                         self.moveDelay -=1
+
+                    self.game_space.fill((6,212,150))
                     self.menu_space.fill((214,69,80))
                     self.board.draw(self.game_space)
                          
                     
                     if self.block.checkDownCollison(self.board):
-                         self.points += self.board.checkTetris()
-                         pygame.event.post(pygame.event.Event(NEW_BLOCK_EVENT))
-               
+                         if self.downDelay <0:
+                              self.points += self.board.checkTetris()
+                              pygame.event.post(pygame.event.Event(NEW_BLOCK_EVENT))
+                              self.downDelay = 10
+                         else:
+                              self.downDelay -=1
+                    
                else:
-                    draw_text("Game Over",self.screen.get_width() // 2, self.screen.get_height() // 2,40, True,self.screen)
-                    draw_text("Press R to Restart",self.screen.get_width() // 2 , self.screen.get_height() // 2 + 100,30, True, self.screen)
+                    draw_text("Game Over",self.screen.get_width() // 2, self.screen.get_height() // 2 -75,30, True,self.screen)
+                    draw_text("SCORE: " + str(self.points),self.screen.get_width() // 2 , self.screen.get_height() // 2 ,30, True, self.screen)
+                    draw_text("Press R to Restart",self.screen.get_width() // 2 , self.screen.get_height() // 2 + 75,30, True, self.screen)
+                   
                     
 
                pygame.display.update()

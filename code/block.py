@@ -9,7 +9,7 @@ class Block:
         self.tetrominoSpace = BLOCK_SPACE[self.tetrominoLetter][0]
         self.rotation = 0
         self.x = 5
-        self.y = 1
+        self.y = 0
         self.max_y = 20 - len(self.tetrominoSpace)
         self.max_x = 10 - len(self.tetrominoSpace[0])
     
@@ -31,15 +31,18 @@ class Block:
         if self.checkLeftCollision(board) == False:
             self.x -= 1
 
-    def moveDown(self):
-        if self.y < self.max_y:
+    def moveDown(self,board):
+        if self.checkDownCollison(board) == False:
             self.y += 1
             
-    def rotateR(self):
-        if self.rotation !=3:
-            self.rotation +=1
-        else:
-            self.rotation=0
+    def rotateR(self,board):
+        
+        if self.checkRotateCollison(board) == False:
+            if self.rotation !=3:
+                self.rotation += 1
+            else:
+                self.rotation = 0
+        
         self.tetrominoSpace = BLOCK_SPACE[self.tetrominoLetter][self.rotation]
         self.max_y = 20 - len(self.tetrominoSpace)
         self.max_x = 10 - len(self.tetrominoSpace[0])
@@ -86,6 +89,31 @@ class Block:
             for j in range(len(self.tetrominoSpace[i])):
                 if self.tetrominoSpace[i][j] == 1 and board.grid[self.y + i][self.x + j] == 1:
                     return True
+        return False
+    
+    def checkRotateCollison(self,board):
+        if self.rotation !=3:
+            next_rotation = self.rotation +1
+        else:
+            next_rotation = 0
+
+        if len(BLOCK_SPACE[self.tetrominoLetter][next_rotation][0]) - len(self.tetrominoSpace[0]) + self.x > self.max_x:
+            return True
+        
+        if len(BLOCK_SPACE[self.tetrominoLetter][next_rotation])> len(self.tetrominoSpace):
+            if self.y + len(BLOCK_SPACE[self.tetrominoLetter][next_rotation]) <= self.max_y:
+                for i in range(len(BLOCK_SPACE[self.tetrominoLetter][next_rotation][-1])):
+                    if BLOCK_SPACE[self.tetrominoLetter][next_rotation][-1][i] == 1 and board.grid[self.y + len(BLOCK_SPACE[self.tetrominoLetter][next_rotation])][self.x +i] == 1:
+                        return True
+                
+        elif len(BLOCK_SPACE[self.tetrominoLetter][next_rotation])< len(self.tetrominoSpace):
+            if self.x + len(BLOCK_SPACE[self.tetrominoLetter][next_rotation][0]) <= self.max_x:
+                for i in range(len(BLOCK_SPACE[self.tetrominoLetter][next_rotation])):
+                    if BLOCK_SPACE[self.tetrominoLetter][next_rotation][i][-1] == 1 and  board.grid[self.y + i][self.x + len(BLOCK_SPACE[self.tetrominoLetter][next_rotation][0])] == 1:
+                        return True
+            
+
+        
         return False
           
     

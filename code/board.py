@@ -25,6 +25,11 @@ class Board:
     def drawNextBlock(self,screen,key,x,y):
         space = BLOCK_SPACE[key]
         color = BLOCK_COLORS[key]
+        if len(space[0][0]) == 3:
+            x += 15
+        elif len(space[0][0]) == 2:
+            x+= 30
+
         for row in range(len(space[0])):
             for col in range(len(space[0][row])):
                
@@ -32,7 +37,7 @@ class Board:
                     tile_x = x + col * tile_size
                     tile_y = y + row * tile_size
                     pygame.draw.rect(screen, color, (tile_x, tile_y, tile_size, tile_size))
-                    pygame.draw.rect(screen, (0, 0, 0), (tile_x, tile_y, tile_size, tile_size), 2)
+                    pygame.draw.rect(screen, (0, 0, 0), (tile_x, tile_y, tile_size, tile_size), 1)
 
     def resetGrid(self):
         for row in range(self.rows):
