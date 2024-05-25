@@ -7,7 +7,7 @@ import pygame
 
 moveDown = False
 
-class Main:
+class TetrisAI:
      def __init__(self):
          
           pygame.init()
@@ -64,7 +64,7 @@ class Main:
           
           if self.game_over or self.frame_iteration > 100:
                self.reward = -10
-               return self.reward, self.points
+               return self.reward, self.game_over,self.points
 
           self.updateUI()
           self.checkCollision()
@@ -129,10 +129,4 @@ class Main:
                     self.downDelay -=1
 
 
-     def run(self):
 
-          while True:
-               self.playstep()
-
-main = Main()
-main.run()
