@@ -18,7 +18,7 @@ class TetrisAI:
           self.game_space = pygame.Surface((g_width,g_height))
           self.menu_space = pygame.Surface((m_width,g_height))
           
-          self.reset()
+          
 
           self.fall_speed = fall_speed
           self.timer_event = pygame.time.set_timer(MOVE_DOWN_EVENT, fall_speed)
@@ -27,14 +27,8 @@ class TetrisAI:
 
           
           self.points = 0
-
-          self.moveDown = False
-          self.moveLeft = False
-          self.moveRight = False
-          self.hardDrop = False
-          self.rotateR = False
-
           self.downDelay = 10
+          self.reset()
 
           
           
@@ -58,11 +52,13 @@ class TetrisAI:
                elif event.type == MOVE_DOWN_EVENT:
                          self.move(2)
 
+          
+          
           self.move(action)
+
           
-          self.reward = 0
           
-          if self.game_over or self.frame_iteration > 100:
+          if self.game_over:
                self.reward = -10
                return self.reward, self.game_over,self.points
 
@@ -72,6 +68,7 @@ class TetrisAI:
 
           pygame.display.update()
           self.clock.tick(60)
+          return self.reward, self.game_over,self.points
 
      
      def move(self,action):
@@ -87,6 +84,7 @@ class TetrisAI:
                self.block.hardDrop(self.board)
           self.board.resetGrid()
           self.block.drawBlock(self.board)
+          
      
      def updateUI(self):
           self.screen.fill((186, 0, 216))
