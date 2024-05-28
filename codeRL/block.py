@@ -3,7 +3,7 @@ import random
 from settings import BLOCK_SPACE,BLOCK_COLORS,NEW_BLOCK_EVENT
 
 class Block:
-    def __init__(self,next_tetromino_letter = random.choice(list(BLOCK_COLORS.keys()))):
+    def __init__(self,next_tetromino_letter =random.choice(list(BLOCK_COLORS.keys()))):
         self.tetrominoLetter = next_tetromino_letter
         self.tetrominoColor = BLOCK_COLORS[self.tetrominoLetter]
         self.tetrominoSpace = BLOCK_SPACE[self.tetrominoLetter][0]
@@ -20,8 +20,9 @@ class Block:
         for i in range(len(self.tetrominoSpace)):
             for j in range(len(self.tetrominoSpace[i])):
                 if self.tetrominoSpace[i][j] != 0:  
-                    board.grid[i+self.y][j+self.x] =  self.tetrominoSpace[i][j]
-                    board.gridColors[i+self.y][j+self.x] = self.tetrominoColor
+                    if 0 <= self.y + i < len(board.grid) and 0 <= self.x + j < len(board.grid[0]):
+                        board.grid[i+self.y][j+self.x] =  self.tetrominoSpace[i][j]
+                        board.gridColors[i+self.y][j+self.x] = self.tetrominoColor
 
     def moveRight(self,board):
         if self.checkRightCollision(board) == False:
@@ -53,42 +54,48 @@ class Block:
 
 
     def checkDownCollison(self,board):
-        if self.y == self.max_y:
+        if self.y >= self.max_y:
             return True
         
         else:
             for i in range(len(self.tetrominoSpace[0])):
+                
                 if  board.grid[self.y + len(self.tetrominoSpace) ][self.x + i] == 1 and self.tetrominoSpace[-1][i] == 1:
                     return True 
             for i in range(len(self.tetrominoSpace) - 1, 0, -1):
                 for j in range(len(self.tetrominoSpace[0])):
-                    if self.tetrominoSpace[i][j] == 0 and board.grid[self.y+i][self.x+j] == 1 and self.tetrominoSpace[i-1][j] == 1:
-                        return True
+                    if (0 <= self.y + i < len(board.grid) and 0 <= self.x + j < len(board.grid[0]) and 0 <= self.y + i - 1 < len(board.grid)):
+                        if self.tetrominoSpace[i][j] == 0 and board.grid[self.y + i][self.x + j] == 1 and self.tetrominoSpace[i - 1][j] == 1:
+                            return True
         return False
     
-    def checkLeftCollision(self,board):
+    def checkLeftCollision(self, board):
         if self.x != 0:
             for i in range(len(self.tetrominoSpace)):
-                if self.tetrominoSpace[i][0] == 1 and board.grid[self.y + i][self.x-1] == 1:
-                    return True
+                if 0 <= self.y + i < len(board.grid) and 0 <= self.x - 1 < len(board.grid[0]):
+                    if self.tetrominoSpace[i][0] == 1 and board.grid[self.y + i][self.x - 1] == 1:
+                        return True
             return False
         else:
             return True
         
-    def checkRightCollision(self,board):
+    def checkRightCollision(self, board):
         if self.x != self.max_x:
             for i in range(len(self.tetrominoSpace)):
-                if self.tetrominoSpace[i][-1] == 1 and board.grid[self.y + i][self.x + len(self.tetrominoSpace[0])] == 1:
-                    return True
+                if 0 <= self.y + i < len(board.grid) and 0 <= self.x + len(self.tetrominoSpace[0]) < len(board.grid[0]):
+                    if self.tetrominoSpace[i][-1] == 1 and board.grid[self.y + i][self.x + len(self.tetrominoSpace[0])] == 1:
+                        return True
             return False
         else:
             return True
         
-    def checkNewBlockCollision(self,board):
+    def checkNewBlockCollision(self, board):
         for i in range(len(self.tetrominoSpace)):
             for j in range(len(self.tetrominoSpace[i])):
-                if self.tetrominoSpace[i][j] == 1 and board.grid[self.y + i][self.x + j] == 1:
-                    return True
+                if self.tetrominoSpace[i][j] == 1:
+                    if 0 <= self.y + i < len(board.grid) and 0 <= self.x + j < len(board.grid[0]):
+                        if board.grid[self.y + i][self.x + j] == 1:
+                            return True 
         return False
     
     def checkRotateCollison(self,board):

@@ -72,6 +72,16 @@ class TetrisAI:
 
      
      def move(self,action):
+          if self.block.checkDownCollison(self.board):
+               curr_points = self.points
+               self.points += self.board.checkTetris()
+               if self.points - curr_points > 0 and self.points - curr_points < 4000:
+                    self.reward = 5
+               elif self.points - curr_points == 4000:
+                    self.reward =10
+               self.newBlock()
+               return
+          
           if action == 0:
                self.block.moveLeft(self.board)
           elif action == 1:
@@ -84,6 +94,15 @@ class TetrisAI:
                self.block.hardDrop(self.board)
           self.board.resetGrid()
           self.block.drawBlock(self.board)
+
+          if self.block.checkDownCollison(self.board):
+               curr_points = self.points
+               self.points += self.board.checkTetris()
+               if self.points - curr_points > 0 and self.points - curr_points < 4000:
+                    self.reward = 5
+               elif self.points - curr_points == 4000:
+                    self.reward = 10
+               self.newBlock()
           
      
      def updateUI(self):
