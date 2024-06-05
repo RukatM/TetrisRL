@@ -51,6 +51,30 @@ class Board:
                 if self.grid[row][col] != self.template[row][col]:
                     self.template[row][col] = self.grid[row][col]
     
+    def numberOfHoles(self):
+        holes = 0
+        for i in range(1,len(self.template)):
+            for j in range(len(self.template[i])):
+                if self.template[i][j] == 0 and self.template[i-1][j] == 1:
+                        holes += 1
+        
+        return holes
+    def calculateBumpiness(self):
+        heights = []
+        for j in range(len(self.template[0])):
+            height = 20
+            for i in range(len(self.template)):
+                if self.template[i][j] == 0:
+                    height -= 1
+                else:
+                    heights.append(height)
+                    break
+        
+        bumpiness = 0
+        for i in range(len(heights) - 1):
+            bumpiness += abs(heights[i] - heights[i + 1])
+        return bumpiness
+
     def checkTetris(self):
         points_recieved = 0
         tetris_counter = 0

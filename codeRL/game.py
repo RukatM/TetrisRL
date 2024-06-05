@@ -60,6 +60,7 @@ class TetrisAI:
           
           if self.game_over:
                self.reward = -10
+               print(self.reward)
                return self.reward, self.game_over,self.points
 
           self.updateUI()
@@ -68,6 +69,7 @@ class TetrisAI:
 
           pygame.display.update()
           self.clock.tick(60)
+          print(self.reward)
           return self.reward, self.game_over,self.points
 
      
@@ -105,6 +107,7 @@ class TetrisAI:
                self.newBlock()
           
      
+
      def updateUI(self):
           self.screen.fill((186, 0, 216))
           self.screen.blit(self.game_space, (10, 10))
@@ -122,9 +125,10 @@ class TetrisAI:
 
      def newBlock(self):
           self.board.updateTemplate()
+          self.reward = -1 * self.board.numberOfHoles() -0.1 * self.board.calculateBumpiness() 
           self.block = Block(self.next_block_letter)
           self.next_block_letter = random.choice(list(BLOCK_COLORS.keys()))
-          print(self.next_block_letter)
+          # print(self.next_block_letter)
           self.block.generateBlock()
           if self.block.checkNewBlockCollision(self.board):
                self.game_over = True
