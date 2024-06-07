@@ -14,7 +14,8 @@ class Block:
         self.max_x = 10 - len(self.tetrominoSpace[0])
     
     def generateBlock(self):
-        print(self.tetrominoColor,self.tetrominoLetter,self.tetrominoSpace)
+        pass
+        # print(self.tetrominoColor,self.tetrominoLetter,self.tetrominoSpace)
     
     def drawBlock(self,board):
         for i in range(len(self.tetrominoSpace)):
