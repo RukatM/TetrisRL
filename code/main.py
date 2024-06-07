@@ -1,5 +1,4 @@
 from settings import *
-from menu import *
 from board import Board
 from block import Block
 import random
@@ -113,14 +112,29 @@ class Main:
           self.screen.blit(self.menu_space, (g_width + padding*2 , 10))
           
           #print(self.points)
-          draw_text("NEXT", (g_width + padding*2 + m_width //2), 40,20,True,self.screen)
-          draw_text("SCORE", (g_width + padding*2 + m_width //2), self.menu_space.get_height() //2-100,20,True,self.screen)
-          draw_text(str(self.points), (g_width + padding*2 + m_width //2), self.menu_space.get_height() //2 -60,20,True,self.screen)
+          self.draw_text("NEXT", (g_width + padding*2 + m_width //2), 40,20,True)
+          self.draw_text("SCORE", (g_width + padding*2 + m_width //2), self.menu_space.get_height() //2-100,20,True)
+          self.draw_text(str(self.points), (g_width + padding*2 + m_width //2), self.menu_space.get_height() //2 -60,20,True)
           self.board.drawNextBlock(self.screen,self.next_block_letter,(g_width + padding*2 + m_width //2)-60,80)
 
           self.game_space.fill((6,212,150))
           self.menu_space.fill((214,69,80))
           self.board.draw(self.game_space)
+     
+     def draw_text(self,text, x, y,size,background):
+          font = pygame.font.SysFont("arialblack",size)
+          text_color = (0,0,0)
+          
+          img = font.render(text, True, text_color)
+          text_rect = img.get_rect(center=(x, y))
+
+          if background:
+               border_width = 3
+               border_rect = pygame.Rect(text_rect.left - border_width, text_rect.top - border_width, text_rect.width + 2 * border_width, text_rect.height + 2 * border_width)
+               pygame.draw.rect(self.screen, (0,0,0), border_rect)
+               pygame.draw.rect(self.screen, (147,129,255), text_rect)
+
+          self.screen.blit(img, text_rect)
 
      def newBlock(self):
           self.board.updateTemplate()
