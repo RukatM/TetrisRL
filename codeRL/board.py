@@ -75,25 +75,7 @@ class Board:
             bumpiness += abs(heights[i] - heights[i + 1])
         return bumpiness
 
-    def checkTetris(self):
-        points_recieved = 0
-        tetris_counter = 0
-        i = len(self.grid) -1
-        while i >= 0:
-            if self.grid[i].count(1) == len(self.grid[0]):
-                del self.grid[i]
-                tetris_counter += 1
-                del self.gridColors[i]
-                self.grid.insert(0, [0] * self.collumns)
-                self.gridColors.insert(0, [0] * self.collumns)
-                i = len(self.grid) -1
-            else:
-                i -= 1
-        bonus = 1
-        for i in range(tetris_counter):
-            points_recieved += bonus * 100
-            bonus *= 3
-        return points_recieved
+    
 
    
         
